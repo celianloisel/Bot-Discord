@@ -1,3 +1,5 @@
+const { ChannelType, PermissionsBitField } = require('discord.js');
+
 const chalk = require('chalk')
 const config = require('../../../config.json')
 
@@ -50,9 +52,33 @@ module.exports = {
                 }
             }
             else if (interaction.customId == "ticket") {
-                interaction.guild.channels.create(`hello`, {
-                    type: "text",
+                const nameTicket = interaction.user.username
+
+                interaction.guild.channels.create({
+                    name: "Ticket de " + nameTicket,
+                    type: 0,
+                    parent: "1029842628696612914",
+                    permissionOverwrites: [
+                        {
+                            id: interaction.guild.id,
+                            deny: [PermissionsBitField.Flags.ViewChannel],
+                        },
+                        {
+                            id: "1029842628176511069",
+                            deny: [PermissionsBitField.Flags.ViewChannel],
+                            allow: [
+                                PermissionsBitField.Flags.SendMessages,
+                                PermissionsBitField.Flags.ReadMessageHistory,
+                            ]
+                        },
+                        {
+                            id: interaction.user.id,
+                            allow: [PermissionsBitField.Flags.ViewChannel],
+                        },
+                    ],
                 })
+
+                interaction.reply({ content: "Ticket créé !", ephemeral: true })
             }
         }
     }
